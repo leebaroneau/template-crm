@@ -2,7 +2,7 @@ name: twenty
 
 services:
   server:
-    image: twentycrm/twenty:${TAG:-latest}
+    build: .
     expose:
       - "3000"
     volumes:
@@ -21,14 +21,14 @@ services:
       ENCRYPTION_KEY: ${ENCRYPTION_KEY}
       FALLBACK_ENCRYPTION_KEY: ${FALLBACK_ENCRYPTION_KEY:-}
       APP_SECRET: ${APP_SECRET:-}
-      # Uncomment to enable email sending:
-      # EMAIL_FROM_ADDRESS: ${EMAIL_FROM_ADDRESS}
-      # EMAIL_FROM_NAME: ${EMAIL_FROM_NAME}
-      # EMAIL_DRIVER: ${EMAIL_DRIVER}
-      # EMAIL_SMTP_HOST: ${EMAIL_SMTP_HOST}
-      # EMAIL_SMTP_PORT: ${EMAIL_SMTP_PORT}
-      # EMAIL_SMTP_USER: ${EMAIL_SMTP_USER}
-      # EMAIL_SMTP_PASSWORD: ${EMAIL_SMTP_PASSWORD}
+      EMAIL_FROM_ADDRESS: ${EMAIL_FROM_ADDRESS}
+      EMAIL_FROM_NAME: ${EMAIL_FROM_NAME}
+      EMAIL_DRIVER: ${EMAIL_DRIVER:-smtp}
+      EMAIL_SMTP_HOST: ${EMAIL_SMTP_HOST:-localhost}
+      EMAIL_SMTP_PORT: ${EMAIL_SMTP_PORT:-1025}
+      EMAIL_SMTP_USER: ${EMAIL_SMTP_USER:-relay}
+      EMAIL_SMTP_PASSWORD: ${EMAIL_SMTP_PASSWORD:-relay}
+      RESEND_API_KEY: ${RESEND_API_KEY}
     depends_on:
       db:
         condition: service_healthy
@@ -43,7 +43,7 @@ services:
     restart: always
 
   worker:
-    image: twentycrm/twenty:${TAG:-latest}
+    build: .
     command: ["yarn", "worker:prod"]
     volumes:
       - server-local-data:/app/packages/twenty-server/.local-storage
@@ -60,6 +60,13 @@ services:
       ENCRYPTION_KEY: ${ENCRYPTION_KEY}
       FALLBACK_ENCRYPTION_KEY: ${FALLBACK_ENCRYPTION_KEY:-}
       APP_SECRET: ${APP_SECRET:-}
+      EMAIL_FROM_ADDRESS: ${EMAIL_FROM_ADDRESS}
+      EMAIL_FROM_NAME: ${EMAIL_FROM_NAME}
+      EMAIL_SMTP_HOST: ${EMAIL_SMTP_HOST:-localhost}
+      EMAIL_SMTP_PORT: ${EMAIL_SMTP_PORT:-1025}
+      EMAIL_SMTP_USER: ${EMAIL_SMTP_USER:-relay}
+      EMAIL_SMTP_PASSWORD: ${EMAIL_SMTP_PASSWORD:-relay}
+      RESEND_API_KEY: ${RESEND_API_KEY}
     depends_on:
       db:
         condition: service_healthy
