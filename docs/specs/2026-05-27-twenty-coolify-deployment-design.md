@@ -211,11 +211,14 @@ volumes:
 ## Coolify Configuration
 
 **App type:** Docker Compose
-**Source:** Public Git repo — `github.com/leebaroneau/template-crm`, `main` branch
+**Source:** Private Git repo — `github.com/Haverford-Brands/crm-haverford`, `main` branch
 **Compose file path:** `/docker-compose.yml`
 **Server:** haverford-droplet (170.64.147.137)
 **Domain:** `twenty.haverford.com.au` → service `server`, port `3000`
 **TLS:** Auto via Let's Encrypt (Coolify manages)
+
+> `leebaroneau/template-crm` is the upstream reference template — not deployed directly.
+> Coolify deploys from `Haverford-Brands/crm-haverford`. Pull upstream changes via PR.
 
 ---
 
