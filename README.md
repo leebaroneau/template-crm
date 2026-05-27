@@ -38,7 +38,7 @@ Generic Twenty CRM deployment template for Coolify. No brand-specific values in 
 Before any destructive Coolify operation (delete app, modify volumes):
 
 ```bash
-docker ps --filter 'name=twenty' --filter 'name=db' --format '{{.Names}}' | head -1 | xargs -I{} docker exec {} pg_dump -U postgres default > backup_$(date +%Y%m%d).sql
+docker ps --filter 'name=twenty' --filter 'name=db' --filter 'status=running' --format '{{.Names}}' | head -1 | xargs -I{} docker exec {} pg_dump -U postgres ${PG_DATABASE_NAME:-default} > backup_$(date +%Y%m%d).sql
 ```
 
 ## Upstream
